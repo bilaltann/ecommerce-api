@@ -1,4 +1,4 @@
-# eticaret-api
+# ecommerce-api
 
 Bu proje, mikroservis mimarisiyle geliştirilmiş bir e-ticaret API sistemidir. Sipariş oluşturma, stok kontrolü, ödeme işlemleri ve e-posta bildirimlerini yöneten dört temel servisten oluşur.
 
