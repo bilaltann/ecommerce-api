@@ -1,54 +1,75 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using OrderAPI.Consumer;
-using OrderAPI.Models;
 using OrderAPI.Models.Entities;
 using Shared;
-using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. CORS Politikasýný tanýmlýyoruz.
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins(
+                          "http://localhost:3000",
+                          "http://localhost:3002",
+                          "http://localhost:3005",
+                          "http://localhost:3006"
+)
+.AllowAnyHeader()
+.AllowAnyMethod();
 
+                      });
+});
+
+// Diðer servisleri ekliyoruz.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// MassTransit ve DbContext yapýlandýrmalarý
 builder.Services.AddMassTransit(configurator =>
 {
-    configurator.AddConsumer<PaymentEventCompletedEventConsumer>(); 
+    configurator.AddConsumer<PaymentEventCompletedEventConsumer>();
     configurator.AddConsumer<StockNotReservedEventConsumer>();
     configurator.AddConsumer<PaymentFailedEventConsumer>();
     configurator.UsingRabbitMq((context, _configurator) =>
     {
-        _configurator.Host(builder.Configuration["RabbitMQ"]); // claoud amqp üzerinden hostu al
-
+        _configurator.Host(builder.Configuration["RabbitMQ"]);
         _configurator.ReceiveEndpoint(RabbitMQSettings.Order_PaymentCompletedEventQueue, e => e.ConfigureConsumer<PaymentEventCompletedEventConsumer>(context));
         _configurator.ReceiveEndpoint(RabbitMQSettings.Order_StockNotEventQueue, e => e.ConfigureConsumer<StockNotReservedEventConsumer>(context));
         _configurator.ReceiveEndpoint(RabbitMQSettings.Order_PaymentFailedEventQueue, e => e.ConfigureConsumer<PaymentFailedEventConsumer>(context));
-
     });
-
-    });
+});
 builder.Services.AddDbContext<OrderAPIDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer"));
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// Geliþtirme ortamý için Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
+
+// UseRouting'den SONRA, UseAuthorization'dan ÖNCE gelmelidir.
+// Bu, yönlendirme belli olduktan sonra, yetkilendirmeden önce CORS kurallarýnýn uygulanmasýný saðlar.
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();
