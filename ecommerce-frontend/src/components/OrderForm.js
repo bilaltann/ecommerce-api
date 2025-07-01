@@ -1,29 +1,45 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import './OrderForm.css';
 
-const availableProducts = [
-    { productId: "5f559722-7cd4-4c5a-bc6e-252d28bc5ec3", name: "Akıllı Saat", price: 1500.50 , stock:1530},
-    { productId: "8e9f559d-b7fa-4a7d-a64d-d7ed8ab587f2", name: "Bluetooth Kulaklık", price: 899.99, stock:701 },
-    { productId: "a2fccc9e-3ae2-4fd3-8008-0a27911d1cd9", name: "Mekanik Klavye", price: 1200.00, stock: 1981 },
-    { productId: "b4515011-b582-4f2c-a0a3-3756e5c61010", name: "Gaming Mouse", price: 750.75, stock:4855 },
-    { productId: "14fb1064-3668-47d0-8f19-36c981fcdd1c", name: "Webcam", price: 450.00, stock: 246 }
-];
-
 const OrderForm = () => {
+    const [products, setProducts] = useState([]);
+    const [stocks, setStocks] = useState([]);
+    const [mergedProducts, setMergedProducts] = useState([]);
     const [buyerEmail, setBuyerEmail] = useState('');
     const [cart, setCart] = useState([]);
     const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
     const [isLoading, setIsLoading] = useState(false);
 
-   
+    useEffect(() => {
+        // Ürünleri çek
+        axios.get('https://localhost:7211/api/products')
+            .then(res => setProducts(res.data))
+            .catch(err => setStatusMessage({ type: 'error', message: 'Ürünler yüklenemedi!' }));
+        // Stokları çek
+        axios.get('https://localhost:7179/api/stocks')
+            .then(res => setStocks(res.data))
+            .catch(err => setStatusMessage({ type: 'error', message: 'Stoklar yüklenemedi!' }));
+    }, []);
+
+    useEffect(() => {
+        // Ürün ve stokları productId ile birleştir
+        const combined = products.map(product => {
+            const stockObj = stocks.find(stock => stock.productId === product.productId);
+            return {
+                ...product,
+                stock: stockObj ? stockObj.count : 0
+            };
+        });
+        setMergedProducts(combined);
+    }, [products, stocks]);
 
     const handleAddToCart = (product) => {
         setCart(prevCart => {
             const existingItem = prevCart.find(item => item.productId === product.productId);
             if (existingItem && existingItem.count >= product.stock) {
-                setStatusMessage({ type: 'error', message: `${product.name} için stok yetersiz!` });
+                setStatusMessage({ type: 'error', message: `${product.productName} için stok yetersiz!` });
                 return prevCart;
             }
             if (existingItem) {
@@ -31,7 +47,8 @@ const OrderForm = () => {
                     item.productId === product.productId ? { ...item, count: item.count + 1 } : item
                 );
             } else {
-                return [...prevCart, { ...product, count: 1 }];
+                // Sadece ihtiyaç olan alanları cart'a ekle
+                return [...prevCart, { productId: product.productId, productName: product.productName, price: product.price, stock: product.stock, count: 1 }];
             }
         });
     };
@@ -55,7 +72,11 @@ const OrderForm = () => {
         const orderData = {
             buyerId: uuidv4(),
             buyerEmail: buyerEmail,
-            orderItems: cart.map(item => ({ productId: item.productId, count: item.count, price: item.price }))
+            orderItems: cart.map(item => ({
+                productId: item.productId,
+                count: item.count,
+                price: item.price
+            }))
         };
 
         try {
@@ -83,14 +104,15 @@ const OrderForm = () => {
             <main className="main-content">
                 <div className="product-list">
                     <h2>Ürünler</h2>
-                    {availableProducts.map(product => {
+                    {mergedProducts.map(product => {
                         const quantityInCart = cart.find(item => item.productId === product.productId)?.count || 0;
                         const isOutOfStock = quantityInCart >= product.stock;
                         return (
                             <div key={product.productId} className="product-item">
                                 <span>
-                                    {product.name} - {product.price.toFixed(2)} TL
+                                    {product.productName} - {product.price.toFixed(2)} TL
                                     {product.stock <= 15 && <span className="low-stock-warning"> Stok tükenmek üzere!</span>}
+                                    <span> (Stok: {product.stock})</span>
                                 </span>
                                 <button onClick={() => handleAddToCart(product)} disabled={isOutOfStock}>
                                     {isOutOfStock ? 'Stok Tükendi' : 'Sepete Ekle'}
@@ -120,7 +142,7 @@ const OrderForm = () => {
                         ) : (
                             cart.map(item => (
                                 <div key={item.productId} className="cart-item">
-                                    <span>{item.name} x {item.count}</span>
+                                    <span>{item.productName} x {item.count}</span>
                                     <span>{(item.price * item.count).toFixed(2)} TL</span>
                                     <button className="remove-btn" onClick={() => handleRemoveFromCart(item.productId)}>Kaldır</button>
                                 </div>

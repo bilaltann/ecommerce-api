@@ -34,6 +34,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ecommerce-frontend(1)", "ec
 		SlnRelativePath = "ecommerce-frontend\"
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Product.API", "Product.API\Product.API.csproj", "{7A2F8393-705A-423D-BBD3-77D7687F50B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

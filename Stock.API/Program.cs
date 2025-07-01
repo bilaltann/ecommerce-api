@@ -26,6 +26,25 @@ builder.Services.AddMassTransit(configurator =>
     });
 
 });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()   // <--- geliþtirirken tüm origin'lere izin ver
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    // appsettings.json'dan connection string çek
+    var connectionString = configuration.GetSection("MongoDbSettings:ConnectionString").Value
+                        ?? configuration.GetConnectionString("MongoDb") // Alternatif olarak ConnectionStrings altýnda ise
+                        ?? "mongodb://localhost:27017"; // fallback
+    return new MongoClient(connectionString);
+});
 
 builder.Services.AddSingleton<MongoDBService>();
 
@@ -61,6 +80,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
