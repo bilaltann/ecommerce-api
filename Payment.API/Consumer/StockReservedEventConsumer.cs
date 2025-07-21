@@ -3,23 +3,20 @@ using Shared.Events;
 
 namespace Payment.API.Consumer
 {
-    public class StockReservedEventConsumer : IConsumer<StockReservedEvent>
+    public class StockReservedEventConsumer(IPublishEndpoint _publishEndpoint) : IConsumer<StockReservedEvent>
     {
-        IPublishEndpoint _publishEndpoint;
-
-        public StockReservedEventConsumer(IPublishEndpoint publishEndpoint)
-        {
-            _publishEndpoint = publishEndpoint;
-        }
+      
 
         public Task Consume(ConsumeContext<StockReservedEvent> context)
         {
             //ödeme işlemleri
+
             if (true)
             {
                 PaymentCompletedEvent paymentCompletedEvent = new()
                 {
                     OrderId = context.Message.OrderId
+               
                 };
                 _publishEndpoint.Publish(paymentCompletedEvent);
                 Console.WriteLine("ödeme başarılı");
@@ -31,7 +28,15 @@ namespace Payment.API.Consumer
                 PaymentFailedEvent paymentFailedEvent = new()
                 {
                     OrderId = context.Message.OrderId,
-                    Message = "bakiye yetersiz"
+                    Message = "bakiye yetersiz",
+                    OrderItems = context.Message.OrderItems.Select(oi =>
+                    
+                        new Shared.Messages.OrderItemMessage
+                        {
+                            ProductId = oi.ProductId,
+                            Count = oi.Count
+                        }).ToList()
+
                 };
                 _publishEndpoint.Publish(paymentFailedEvent);
                 Console.WriteLine("ödeme başarısız");

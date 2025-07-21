@@ -18,7 +18,7 @@ namespace Mail.API.Services
         public async Task SendEmailAsync(string tomail, string subject, string body)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("BilalAPI", _mailSettings.From));
+            emailMessage.From.Add(new MailboxAddress("e-commerce-api", _mailSettings.From));
             emailMessage.To.Add(new MailboxAddress("Recipient", tomail));
             emailMessage.Subject = subject;
 

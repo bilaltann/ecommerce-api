@@ -14,10 +14,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins(
-                          "http://localhost:3000",
-                          "http://localhost:3002",
-                          "http://localhost:3005",
-                          "http://localhost:3006"
+                          "http://localhost:3000"
 )
 .AllowAnyHeader()
 .AllowAnyMethod();
@@ -33,13 +30,13 @@ builder.Services.AddSwaggerGen();
 // MassTransit ve DbContext yapýlandýrmalarý
 builder.Services.AddMassTransit(configurator =>
 {
-    configurator.AddConsumer<PaymentEventCompletedEventConsumer>();
+    configurator.AddConsumer<PaymentCompletedEventConsumer>();
     configurator.AddConsumer<StockNotReservedEventConsumer>();
     configurator.AddConsumer<PaymentFailedEventConsumer>();
     configurator.UsingRabbitMq((context, _configurator) =>
     {
         _configurator.Host(builder.Configuration["RabbitMQ"]);
-        _configurator.ReceiveEndpoint(RabbitMQSettings.Order_PaymentCompletedEventQueue, e => e.ConfigureConsumer<PaymentEventCompletedEventConsumer>(context));
+        _configurator.ReceiveEndpoint(RabbitMQSettings.Order_PaymentCompletedEventQueue, e => e.ConfigureConsumer<PaymentCompletedEventConsumer>(context));
         _configurator.ReceiveEndpoint(RabbitMQSettings.Order_StockNotEventQueue, e => e.ConfigureConsumer<StockNotReservedEventConsumer>(context));
         _configurator.ReceiveEndpoint(RabbitMQSettings.Order_PaymentFailedEventQueue, e => e.ConfigureConsumer<PaymentFailedEventConsumer>(context));
     });

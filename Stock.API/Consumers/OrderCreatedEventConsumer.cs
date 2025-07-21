@@ -48,7 +48,8 @@ namespace Stock.API.Consumers
                 {
                     BuyerId = context.Message.BuyerId,
                     OrderId = context.Message.OrderId,
-                    TotalPrice = context.Message.TotalPrice
+                    TotalPrice = context.Message.TotalPrice,
+                    OrderItems = context.Message.OrderItems
                 };
                 ISendEndpoint sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitMQSettings.Payment_StockReservedEventQueue}"));
                 await sendEndpoint.Send(stockReservedEvent);
@@ -60,7 +61,7 @@ namespace Stock.API.Consumers
                 {
                     BuyerId = context.Message.BuyerId,
                     OrderId = context.Message.OrderId,
-                    Message = "...."
+                    Message = "Stok yetersiz"
                 };
 
                 await _publishEndpoint.Publish(stockNotReservedEvent);

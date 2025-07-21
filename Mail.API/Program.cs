@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -20,10 +19,13 @@ builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddMassTransit(configurator =>
 {
     configurator.AddConsumer<OrderCompletedEventConsumer>();
+    configurator.AddConsumer<OrderFailedEventConsumer>();
     configurator.UsingRabbitMq((context, _configurator) =>
     {
         _configurator.Host(builder.Configuration["RabbitMQ"]);
         _configurator.ReceiveEndpoint(RabbitMQSettings.Mail_OrderCompletedEventQueue, e => e.ConfigureConsumer<OrderCompletedEventConsumer>(context));
+        _configurator.ReceiveEndpoint(RabbitMQSettings.Mail_OrderFailedEventQueue, e => e.ConfigureConsumer<OrderFailedEventConsumer>(context));
+
     });
 });
 

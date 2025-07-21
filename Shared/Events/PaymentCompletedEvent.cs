@@ -11,5 +11,6 @@ namespace Shared.Events
     {
         public Guid OrderId { get; set; }
 
+
     }
 }

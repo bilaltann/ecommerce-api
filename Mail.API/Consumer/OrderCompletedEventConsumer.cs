@@ -4,13 +4,9 @@ using Shared.Events;
 
 namespace Mail.API.Consumer
 {
-    public class OrderCompletedEventConsumer : IConsumer<OrderCompletedEvent>
+    public class OrderCompletedEventConsumer(IMailService _mailService) : IConsumer<OrderCompletedEvent>
     {
-        private readonly IMailService _mailService;
-        public OrderCompletedEventConsumer(IMailService mailService)
-        {
-            _mailService = mailService;
-        }
+        
         public async Task Consume(ConsumeContext<OrderCompletedEvent> context)
         {
             try

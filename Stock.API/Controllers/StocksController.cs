@@ -17,8 +17,8 @@ namespace Stock.API.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetStocks()
-        {
-            var stocks = await _stocksCollection.Find(_ => true).ToListAsync();
+        {var stocks = await _stocksCollection.Find(
+            _ => true).ToListAsync();
             return Ok(stocks);
         }
     }

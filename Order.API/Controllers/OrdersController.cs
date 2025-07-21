@@ -8,16 +8,9 @@ namespace OrderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class OrdersController(OrderAPIDbContext _context, IPublishEndpoint _publishEndpoint) : ControllerBase
     {
-        readonly OrderAPIDbContext _context;
-        readonly IPublishEndpoint _publishEndpoint;
-        public OrdersController(OrderAPIDbContext context ,IPublishEndpoint publishEndpoint)
-        {
-            _context = context;
-            _publishEndpoint = publishEndpoint;
-        }
-
+      
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderVM createOrder)
         {
@@ -30,15 +23,19 @@ namespace OrderAPI.Controllers
                 OrderStatus = Models.Enums.OrderStatus.Suspend
             };
 
+
             order.OrderItems=createOrder.OrderItems.Select(oi=> new OrderItem
             {
                 Count= oi.Count,
                 Price= oi.Price,
                 ProductId=oi.ProductId,
             }).ToList();
+
             order.TotalPrice=createOrder.OrderItems.Sum(oi=>(oi.Price*oi.Count));
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
+
+
             OrderCreatedEvent orderCreatedEvent = new()
             {
                 BuyerId = order.BuyerId,

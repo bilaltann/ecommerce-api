@@ -1,4 +1,5 @@
 ﻿using Shared.Events.Common;
+using Shared.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Shared.Events
     {
         public Guid OrderId { get; set; }
         public string Message { get; set; }
+
+        public List<OrderItemMessage> OrderItems { get; set; }
     }
 }
