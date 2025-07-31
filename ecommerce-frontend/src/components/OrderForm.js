@@ -14,11 +14,11 @@ const OrderForm = () => {
 
     useEffect(() => {
         // Ürünleri çek
-        axios.get('https://localhost:7211/api/products')
+        axios.get(`${process.env.REACT_APP_PRODUCT_API}/api/products`)
             .then(res => setProducts(res.data))
             .catch(err => setStatusMessage({ type: 'error', message: 'Ürünler yüklenemedi!' }));
         // Stokları çek
-        axios.get('https://localhost:7179/api/stocks')
+        axios.get(`${process.env.REACT_APP_STOCK_API}/api/stocks`)
             .then(res => setStocks(res.data))
             .catch(err => setStatusMessage({ type: 'error', message: 'Stoklar yüklenemedi!' }));
     }, []);
@@ -80,7 +80,7 @@ const OrderForm = () => {
         };
 
         try {
-            const API_URL = 'http://localhost:5195/api/orders';
+            const API_URL = `${process.env.REACT_APP_ORDER_API}/api/orders`;
             const response = await axios.post(API_URL, orderData);
             if (response.status === 200) {
                 setStatusMessage({ type: 'success', message: 'Siparişiniz başarıyla oluşturuldu!' });

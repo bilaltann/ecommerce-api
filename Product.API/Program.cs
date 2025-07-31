@@ -11,9 +11,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowFrontend",policy =>
     {
-        policy.AllowAnyOrigin()   // <--- geliþtirirken tüm origin'lere izin ver
+        policy.WithOrigins("http://localhost:3000")    // <--- geliþtirirken tüm origin'lere izin ver
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 app.MapControllers();

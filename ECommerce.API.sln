@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderAPI", "Order.API\OrderAPI.csproj", "{F5F947BE-1292-4274-9406-F21A38151D91}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{E87DFF91-A3DC-43FB-A656-132F51E70B32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stock.API", "Stock.API\Stock.API.csproj", "{E2FFD4F8-EC91-4833-8F7C-39802F0584A2}"
@@ -13,28 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.API", "Payment.API\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mail.API", "Mail.API\Mail.API.csproj", "{3C713675-9EE4-4249-BC7A-6C57C1F80694}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ecommerce-frontend(1)", "ecommerce-frontend\", "{CF99AC8C-BA16-460F-91F9-21F7A84A8793}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_51377"
-		Debug.AspNetCompiler.PhysicalPath = "ecommerce-frontend\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51377\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_51377"
-		Release.AspNetCompiler.PhysicalPath = "ecommerce-frontend\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51377\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "51377"
-		SlnRelativePath = "ecommerce-frontend\"
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Product.API", "Product.API\Product.API.csproj", "{7A2F8393-705A-423D-BBD3-77D7687F50B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderAPI", "OrderAPI\OrderAPI.csproj", "{D1ACEF3B-0A9C-4A5D-AE43-F7E7E133380A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F5F947BE-1292-4274-9406-F21A38151D91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5F947BE-1292-4274-9406-F21A38151D91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5F947BE-1292-4274-9406-F21A38151D91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5F947BE-1292-4274-9406-F21A38151D91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E87DFF91-A3DC-43FB-A656-132F51E70B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E87DFF91-A3DC-43FB-A656-132F51E70B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E87DFF91-A3DC-43FB-A656-132F51E70B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,14 +37,14 @@ Global
 		{3C713675-9EE4-4249-BC7A-6C57C1F80694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C713675-9EE4-4249-BC7A-6C57C1F80694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C713675-9EE4-4249-BC7A-6C57C1F80694}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF99AC8C-BA16-460F-91F9-21F7A84A8793}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A2F8393-705A-423D-BBD3-77D7687F50B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1ACEF3B-0A9C-4A5D-AE43-F7E7E133380A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1ACEF3B-0A9C-4A5D-AE43-F7E7E133380A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1ACEF3B-0A9C-4A5D-AE43-F7E7E133380A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1ACEF3B-0A9C-4A5D-AE43-F7E7E133380A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - ecommerce
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    environment:
+      SA_PASSWORD: "StrongPassword123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "11433:1433"
+    
+    volumes:
+      - mssqldata:/var/opt/mssql   # 🟢 VERİLERİN SAKLANACAĞI KISIM
+    networks:
+      - ecommerce
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27018:27017"
+    networks:
+      - ecommerce
+
+  frontend:
+    build:
+      context: ./ecommerce-frontend
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "3000:80"
+    
+    env_file:
+      - ./ecommerce-frontend/.env
+    depends_on:
+      - orderapi
+      - stockapi
+      - paymentapi
+      - mailapi
+    networks:
+      - ecommerce
+      
+  orderapi:
+    build:
+      context: .
+      dockerfile: OrderAPI/Dockerfile
+    container_name: orderapi
+    ports:
+      - "5001:8080"
+    depends_on:
+      - rabbitmq
+      - mssql
+    networks:
+      - ecommerce
+
+
+
+  productapi:
+    build:
+      context: .
+      dockerfile: Product.API/Dockerfile
+    container_name: productapi
+    ports:
+      - "5005:8080"
+    depends_on:
+      - mssql
+      - rabbitmq
+    
+    networks:
+      - ecommerce
+
+
+  stockapi:
+    build:
+      context: .
+      dockerfile: Stock.API/Dockerfile
+    container_name: stockapi
+    ports:
+      - "5002:8080"
+    depends_on:
+      - rabbitmq
+      - mongo
+    networks:
+      - ecommerce
+
+  paymentapi:
+    build:
+      context: .
+      dockerfile: Payment.API/Dockerfile
+    container_name: paymentapi
+    ports:
+      - "5003:80"
+    depends_on:
+      - rabbitmq
+    networks:
+      - ecommerce
+
+  mailapi:
+    build:
+      context: .
+      dockerfile: Mail.API/Dockerfile
+    container_name: mailapi
+    ports:
+      - "5004:80"
+    depends_on:
+      - rabbitmq
+    networks:
+      - ecommerce
+
+networks:
+  ecommerce:
+    driver: bridge
+
+volumes:
+  mssqldata:   # 🟢 Volume burada tanımlanmalı

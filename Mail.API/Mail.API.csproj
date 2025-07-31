@@ -18,7 +18,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Order.API\OrderAPI.csproj" />
 		<ProjectReference Include="..\Payment.API\Payment.API.csproj" />
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 		<ProjectReference Include="..\Stock.API\Stock.API.csproj" />
