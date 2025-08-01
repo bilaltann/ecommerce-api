@@ -1,3 +1,4 @@
+
 version: '3.8'
 
 services:
@@ -14,18 +15,20 @@ services:
       - ecommerce
 
   mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    build:
+      context: ./mssql
+      dockerfile: Dockerfile.mssql
     container_name: mssql
     environment:
       SA_PASSWORD: "StrongPassword123!"
       ACCEPT_EULA: "Y"
     ports:
       - "11433:1433"
-    
     volumes:
-      - mssqldata:/var/opt/mssql   # 🟢 VERİLERİN SAKLANACAĞI KISIM
+      - mssqldata:/var/opt/mssql
     networks:
       - ecommerce
+
   mongo:
     image: mongo
     container_name: mongo
