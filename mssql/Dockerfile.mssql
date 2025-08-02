@@ -6,17 +6,15 @@ USER root
 RUN apt-get update && \
     apt-get install -y curl gnupg apt-transport-https software-properties-common
 
-# Microsoft repo ekle (apt-key kullanmadan)
+# Microsoft repo ekle
 RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg && \
     curl -sSL https://packages.microsoft.com/config/ubuntu/22.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
-# Sqlcmd kur
+# sqlcmd kur ve erişilebilir hale getir
 RUN apt-get update && \
     ACCEPT_EULA=Y apt-get install -y mssql-tools unixodbc-dev && \
     ln -sfn /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd
 
-# init.sql dosyasını kopyala
-COPY init.sql /init.sql
+# init.sql dosyasını container'a kopyalama — bunu dışarıdan yapacağız
 
-# Başlangıçta SQL Server'ı başlat ve init.sql çalıştır
-CMD /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 20 && sqlcmd -S localhost -U sa -P StrongPassword123! -i /init.sql && tail -f /dev/null"
+CMD ["/opt/mssql/bin/sqlservr"]
