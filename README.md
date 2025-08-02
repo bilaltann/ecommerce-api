@@ -37,6 +37,7 @@ yüklü olmalıdır.
 ### 1. Projeyi Klonla
 
 git clone https://github.com/bilaltann/ecommerce-api
+
 cd ecommerce-api
 
 
